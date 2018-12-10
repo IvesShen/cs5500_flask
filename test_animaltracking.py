@@ -76,6 +76,50 @@ class TestAnimalTracking:
 		assert r.status_code == 200
 		assert r.json()['message'] == 'The user has been deleted'
 		
+	#test if we can find all pets	
+	def test_findpets(self, token):
+		path = "/pet"
+		url = BASE_URL + path
+                r = requests.get(url, headers={'x-access-token' : token})
+                assert r.status_code == 200
+		assert r.json()['pets'][0]['name'] == 'dog'
+
+	#test if we can find one pet with its id
+	def test_findonepet(self, token):
+		path = "/pet/1"
+		url = BASE_URL + path
+		r = requests.get(url, headers={'x-access-token' : token})
+		assert r.status_code == 200
+		assert r.json()['name'] == 'dog'
+		assert r.json()['id'] == 1
+
+	#test if we can add one pet
+	def test_postpet(self, token):
+		path = "/pet"
+		url = BASE_URL + path
+		data = {"name" : "newPet"+uuid.uuid1().hex}
+                r = requests.post(url, headers={'x-access-token' : token}, json=data)
+                assert r.status_code == 200
+                assert r.json()['message'] == 'Pet created!'
+
+	#test if we can update pet information
+	def test_updatepet(self, token):
+		path = "/pet/21"
+		url = BASE_URL + path
+		payload = {"name" : "modified pet"}
+                r = requests.put(url, json=payload, headers={'x-access-token' : token})
+                assert r.status_code == 200
+                assert r.json()['message'] == 'Pet updated!'
+
+	#test if we can delete one pet
+	def test_deletepet(self, token):
+		path = "/pet/41"
+		url = BASE_URL + path
+                r = requests.delete(url, headers={'x-access-token' : token})
+                assert r.status_code == 200
+                assert r.json()['message'] == 'Pet deleted!'
+
+
 
 
 
