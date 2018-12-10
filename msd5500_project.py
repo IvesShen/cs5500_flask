@@ -42,6 +42,7 @@ def token_required(f):
 
 
 @app.route('/user', methods=['GET'])
+@token_required
 def get_all_users(current_user):
 
     if not current_user.admin:
@@ -63,6 +64,7 @@ def get_all_users(current_user):
 
 
 @app.route('/user/<public_id>', methods=['GET'])
+@token_required
 def get_one_user(current_user, public_id):
 
     if not current_user.admin:
@@ -83,6 +85,7 @@ def get_one_user(current_user, public_id):
 
 
 @app.route('/user', methods=['POST'])
+@token_required
 def create_user(current_user):
 
     if not current_user.admin:
@@ -100,6 +103,7 @@ def create_user(current_user):
 
 
 @app.route('/user/promote/<public_id>', methods=['PUT'])
+@token_required
 def promote_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message': 'Cannot perform that function!'})
@@ -116,6 +120,7 @@ def promote_user(current_user, public_id):
 
 
 @app.route('/user/<public_id>', methods=['PUT'])
+@token_required
 def update_user(current_user, public_id):
 
     user = User.query.filter_by(public_id=public_id).first()
@@ -131,6 +136,7 @@ def update_user(current_user, public_id):
 
 
 @app.route('/user/<public_id>', methods=['DELETE'])
+@token_required
 def delete_user(current_user, public_id):
     if not current_user.admin:
         return jsonify({'message': 'Cannot perform that function!'})
